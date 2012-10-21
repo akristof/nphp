@@ -69,6 +69,12 @@ class Nphp_Request {
     public $request;
 
     /**
+     * Set to TRUE if X-Requested-With header is set to "XMLHttpRequest", supported by modern JS libraries
+     * @var boolean
+     */
+    public $is_xhr;
+
+    /**
      * Constructor - fills all properties
      */
     public function __construct() {
@@ -83,6 +89,11 @@ class Nphp_Request {
         $this->post = $_POST;
         $this->get = $_GET;
         $this->request = $_REQUEST;
+        if (array_key_exists("HTTP_X_REQUESTED_WITH", $_SERVER)) {
+            $this->is_xhr = strtolower($_SERVER["HTTP_X_REQUESTED_WITH"]) == "xmlhttprequest";
+        } else {
+            $this->is_xhr = FALSE;
+        }
 
     }
 
