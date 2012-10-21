@@ -35,7 +35,7 @@ class Nphp_ErrorPage extends Nphp_ControllerAbstract {
 
         $vars = $e->getTrace();
 
-        if (count($vars[0]["args"]) > 0) {
+        if (count($vars[0]["args"]) >= 4) {
             $vars = $vars[0]["args"][4];
         } else {
             $vars = $vars[0]["args"];
