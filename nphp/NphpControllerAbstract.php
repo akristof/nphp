@@ -51,10 +51,28 @@ abstract class Nphp_ControllerAbstract {
      */
     public function render($template, $context) {
 
-        extract($context);
-        $include_status = include $template;
+        // get previous output buffering (for debug toolbar), only needed because php include will output content right away
+        $ob_content = ob_get_contents();
+        ob_clean();
 
-        return $this->request->response;
+        extract($context);
+        try {
+            $include_status = include $template;
+        } catch (ErrorException $e) {
+            throw new Nphp_TemplateMissingException("Template '{$template}' was not found.");
+        }
+        // get template output
+        $ob_template_content = ob_get_contents();
+        ob_clean();
+
+        // add content to response
+        $response = $this->request->response;
+        $response->content = $ob_template_content;
+
+        // output previous content back to output buffer
+        echo $ob_content;
+
+        return $response;
 
     }
 

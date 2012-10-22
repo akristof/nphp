@@ -33,4 +33,5 @@ require_once("NphpRequest.php");
 require_once("NphpControllerAbstract.php");
 require_once("NphpResponse.php");
 require_once("NphpResponseRedirect.php");
+require_once("NphpTemplateMissingException.php");
 require_once("NphpErrorPage.php");

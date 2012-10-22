@@ -58,9 +58,24 @@ class Nphp_Application {
     public $error500 = "500 error!";
 
     /**
+     * Debug toolbar is enabled by default when debug is TRUE, change this if needed
+     * @var boolean
+     */
+    public $disableDebugToolbar = FALSE;
+
+    /**
+     * Unix time when request started, used to calculate load time
+     * @var mixed
+     */
+    private $startRequestTime;
+
+    /**
      * Constructor, starts session as it's usually the first thing executed
      */
     public function __construct() {
+
+        // start timer
+        $this->startRequestTime = microtime(TRUE);
 
         // start session
         session_start();
@@ -228,11 +243,46 @@ class Nphp_Application {
             $response_obj->_setCookies();
             // set response code
             $GLOBALS['http_response_code'] = $response_obj->code;
+
+            // show debug toolbar or flush output buffer
+            if ($this->debug && !$this->request->is_xhr) {
+                if ($this->disableDebugToolbar) {
+                    // output buffer if debug toolbar is disabled
+                    ob_end_flush();
+                } else {
+                    // get buffer contents and disable buffering
+                    $ob_content = ob_get_contents();
+                    ob_end_clean();
+
+                    // calculate end time
+                    $endRequestTime = microtime(TRUE);
+                    $requestTime = ($endRequestTime - $this->startRequestTime);
+                    $requestTime = sprintf("total: <span title=\"%.10f sec\">%.3f ms</span>", $requestTime, $requestTime*1000);
+
+                    // render toolbar page
+                    ob_start();
+                    include "NphpToolbarTemplate.php";
+                    $toolbar_content = ob_get_contents();
+                    ob_end_clean();
+
+                    // add debug toolbar to output content (before </body> or at the end)
+                    if (stripos($response_obj->content, "</body>") === FALSE) {
+                        $response_obj->content = "{$response_obj->content}\n{$toolbar_content}";
+                    } else {
+                        $response_obj->content = str_ireplace("</body>", "\n{$toolbar_content}\n</body>", $response_obj->content);
+                    }
+                }
+            } else {
+                // debug is turned off, discard everything in output buffer
+                ob_end_clean();
+            }
+
             // display content
             echo $response_obj->content;
 
-            // flush output buffer
-            ob_end_flush();
+            // flush everything
+            //ob_end_flush();
+
 
         } catch (Exception $e) {
 
@@ -245,7 +295,9 @@ class Nphp_Application {
 
             } else {
                 // show error 500 page and log error if logging is set up
+
                 echo $this->error500;
+
             }
 
         }

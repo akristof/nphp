@@ -10,9 +10,7 @@
 */
 
 /**
- * Extend this for each controller
- *
- * Suggestion: add render() method to render templates with your favourite templating engine
+ * Controller for error pages, adds request object and variable information
  *
  */
 class Nphp_ErrorPage extends Nphp_ControllerAbstract {
