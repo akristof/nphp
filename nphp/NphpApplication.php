@@ -280,10 +280,6 @@ class Nphp_Application {
             // display content
             echo $response_obj->content;
 
-            // flush everything
-            //ob_end_flush();
-
-
         } catch (Exception $e) {
 
             if ($this->debug) {

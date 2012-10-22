@@ -47,7 +47,7 @@
     #nphp_debug_toolbar {
         display: none;
         background: #111;
-        width: 350px;
+        width: 700px;
         z-index: 100000000;
         position: fixed;
         top: 0;
