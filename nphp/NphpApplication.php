@@ -206,7 +206,7 @@ class Nphp_Application {
 
                     // set headers
                     foreach ($response->headers as $header) {
-                        header($header, TRUE, $response_obj->code);
+                        header($header, TRUE, $response->code);
                     }
                     // set cookies
                     $response->_setCookies();
