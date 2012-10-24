@@ -192,34 +192,34 @@ class Nphp_Application {
                 }
             }
 
-            // check if bootstrap returns redirect - don't run any controller
-            if ($this->request->response instanceof Nphp_ResponseRedirect) {
-
-                $response = $this->request->response;
-
-                // set headers
-                foreach ($response->headers as $header) {
-                    header($header, TRUE, $response_obj->code);
-                }
-                // set cookies
-                $response->_setCookies();
-                // set response code
-                $GLOBALS['http_response_code'] = $response->code;
-
-                ob_end_clean();
-
-                echo $response->content;
-
-                return;
-
-            }
-
             if (is_null($class)) {
 
                 // route was not found (none of the urls matched current url, display $error404 content)
                 $response = $this->error404;
 
             } else {
+
+                // check if bootstrap returns redirect - don't run any controller
+                if ($this->request->response instanceof Nphp_ResponseRedirect) {
+
+                    $response = $this->request->response;
+
+                    // set headers
+                    foreach ($response->headers as $header) {
+                        header($header, TRUE, $response_obj->code);
+                    }
+                    // set cookies
+                    $response->_setCookies();
+                    // set response code
+                    $GLOBALS['http_response_code'] = $response->code;
+
+                    ob_end_clean();
+
+                    echo $response->content;
+
+                    return;
+
+                }
 
                 // hook for autoloaders
                 if (method_exists($this, "autoload")) {
