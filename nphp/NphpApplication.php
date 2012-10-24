@@ -43,19 +43,19 @@ class Nphp_Application {
     public $prefix = NULL;
 
     /**
-     * Content that is displayed when 404 error occurs
+     * Controller that is used when 404 error occurs
      *
      * Easily overriden or changed to custom template/content
      *
-     * @var string
+     * @var Nphp_Response
      */
-    public $error404 = "404 error!";
+    public $error404;
 
     /**
-     * Content that is displayed when error 500 occurs (server error)
-     * @var string
+     * Controller that is used when error 500 occurs (server error)
+     * @var Nphp_Response
      */
-    public $error500 = "500 error!";
+    public $error500;
 
     /**
      * Debug toolbar is enabled by default when debug is TRUE, change this if needed
@@ -85,6 +85,10 @@ class Nphp_Application {
 
         // add to current cookies list so it's accessible in first request
         $this->request->response->cookies['PHPSESSID'] = session_id();
+
+        // set error 404 & 500 controllers
+        $this->error404 = new Nphp_Response404("404 error!");
+        $this->error500 = new Nphp_Response500("500 error!");
 
     }
 
@@ -217,6 +221,8 @@ class Nphp_Application {
 
                     echo $response->content;
 
+                    die();
+
                     return;
 
                 }
@@ -242,8 +248,7 @@ class Nphp_Application {
                     if ($this->debug) {
                         throw new Nphp_ControllerException("{$class} is missing method function (get(), post(), ...) or all().");
                     } else {
-                        $response = new Nphp_Response();
-                        $response->content = $this->error500;
+                        $response = $this->error500;
                         $response->code = 405; // HTTP: method not allowed
                     }
                 }
@@ -314,7 +319,7 @@ class Nphp_Application {
             } else {
                 // show error 500 page and log error if logging is set up
 
-                echo $this->error500;
+                echo $this->error500->content;
 
             }
 
