@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>nphp</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/prettify.css" rel="stylesheet" media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Oleo+Script:700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+
+        body {
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        h1.title {
+            color: #75aa72;
+            font-family: 'Oleo Script', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 50px;
+        }
+
+        .container-narrow {
+            margin: 0 auto;
+            max-width: 540px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+
+        pre.prettyprint {
+            padding: 10px;
+            background-color: #f7f7f9;
+            border: 1px solid #e1e1e8;
+        }
+
+        code, pre {
+            margin-top: 5px;
+            font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
+            color: #5e5e5e;
+        }
+
+        </style>
+    </head>
+    <body onload="prettyPrint()">
+
+        <div class="container-narrow">
+
+            <ul class="nav nav-pills pull-right">
+                <li><a href="index.htm">Home</a></li>
+                <li class="active"><a href="install.htm">Install</a></li>
+                <li><a href="doc.htm">Documentation</a></li>
+            </ul>
+
+            <h1 class="title">nphp</h1>
+
+            <hr>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>Installing from ZIP</h4>
+                    <div class="pull-right"><a href="https://github.com/akristof/nphp/archive/master.zip" class="btn btn-primary">Download ZIP file</a></div>
+                    <ul>
+                        <li>download latest version</li>
+                        <li>unpack the archive</li>
+                        <li>move files to your project</li>
+                    </ul>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>Installing from development version</h4>
+                    Project code is <a href="https://github.com/akristof/nphp">hosted on GitHub</a>, use <code>git clone git://github.com/akristof/nphp.git</code> to clone repository.
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>Installing with Composer</h4>
+                    <ul>
+                        <li>install Composer (<a href="http://getcomposer.org/doc/00-intro.md#installation-windows">Windows</a>, <a href="http://getcomposer.org/doc/00-intro.md#installation-nix">*nix</a>)</li>
+                        <li>
+                            create <code>composer.json</code> file in your project<br>
+                            <pre class="prettyprint"><code class="language-json">{
+    "require": {
+        "nphp/nphp": "dev-master"
+    }
+}</code></pre>
+                        </li>
+                        <li>install using <code>composer install</code> if you installed Composer globally, or <code>php composer.phar install</code> if you installed it locally</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>Start developing</h4>
+                    Include/require <code>nphp.php</code> file in your <code>index.php</code> and start developing, <a href="#">read documentation</a> or try minimal application:<br>
+                    <pre class="prettyprint"><code class="language-php">&lt;?php
+
+require_once("nphp/nphp.php");
+
+class IndexController extends Nphp_ControllerAbstract {
+    public function get($request) {
+        return "hello world!";
+    }
+}
+
+$app = new Nphp_Application();
+$app->setRoutes(array('^/$' => 'IndexController'));
+$app->start();</code></pre>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="footer">
+                <p>&copy; Aleš Krištof 2013</p>
+            </div>
+
+        </div>
+
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/prettify.js"></script>
+    </body>
+</html>

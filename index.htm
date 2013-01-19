@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>nphp</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/prettify.css" rel="stylesheet" media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Oleo+Script:700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+
+        body {
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        h1.title {
+            color: #75aa72;
+            font-family: 'Oleo Script', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 50px;
+        }
+
+        .container-narrow {
+            margin: 0 auto;
+            max-width: 540px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+
+        pre.prettyprint {
+            padding: 10px;
+            background-color: #f7f7f9;
+            border: 1px solid #e1e1e8;
+        }
+
+        code, pre {
+            margin-top: 5px;
+            font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
+            color: #5e5e5e;
+        }
+
+        </style>
+    </head>
+    <body onload="prettyPrint()">
+
+        <div class="container-narrow">
+
+            <ul class="nav nav-pills pull-right">
+                <li class="active"><a href="index.htm">Home</a></li>
+                <li><a href="install.htm">Install</a></li>
+                <li><a href="doc.htm">Documentation</a></li>
+            </ul>
+
+            <h1 class="title">nphp</h1>
+
+            <hr>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <p>Minimalistic fully object oriented PHP library for fast and easy web development.<p>
+                    <p>Provides routing and controller parts for <a href="#">MVC architecture</a>. You're free to use any <a href="#">templating engine</a> and any form of <a href="#">data storage</a> for your web applications. It's open source - <a href="http://opensource.org/licenses/MIT">MIT licensed</a>.</p><br>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <span class="muted">Minimal application:</span><br>
+                    <pre class="prettyprint"><code class="language-php">&lt;?php
+
+require_once("nphp/nphp.php");
+
+class IndexController extends Nphp_ControllerAbstract {
+    public function get($request) {
+        return "hello world!";
+    }
+}
+
+$app = new Nphp_Application();
+$app->setRoutes(array('^/$' => 'IndexController'));
+$app->start();</code></pre>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>Features</h4>
+                    <ul>
+                        <li>url routing - using native php regular expressions</li>
+                        <li>simple request and response objects</li>
+                        <li>easily extensible - using basic PHP OOP features</li>
+                        <li>using PHP as templating languge, but feel free to choose your own <a href="#">templating engine</a></li>
+                        <li>effortless debugging with intaractive <a href="#">debugging page</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="footer">
+                <p>&copy; Aleš Krištof 2013</p>
+            </div>
+
+        </div>
+
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/prettify.js"></script>
+    </body>
+</html>
