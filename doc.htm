@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>nphp - documentation</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/prettify.css" rel="stylesheet" media="screen">
+        <link href='http://fonts.googleapis.com/css?family=Oleo+Script:700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="img/favicon.png">
+        <style type="text/css">
+
+        body {
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        h1.title {
+            color: #75aa72;
+            font-family: 'Oleo Script', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 50px;
+        }
+
+        .container-narrow {
+            margin: 0 auto;
+            max-width: 740px;
+        }
+
+        .container-narrow-header {
+            max-width: 540px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+
+        pre.prettyprint {
+            padding: 10px;
+            background-color: #f7f7f9;
+            border: 1px solid #e1e1e8;
+        }
+
+        code, pre {
+            margin-top: 5px;
+            font-family: Consolas, Monaco, Menlo, "Courier New", monospace;
+            color: #5e5e5e;
+        }
+
+        ul.nav-list li, ul.nav-list li a {
+            font-size: 11px;
+        }
+
+        ul.nav-list li {
+            line-height: 18px
+        }
+
+        .nav-list > li > a,
+        .nav-list .nav-header {
+            padding: 0 10px;
+        }
+
+        ul.nav-list {
+            width: 123px;
+        }
+
+        .affix {
+            top: 20px;
+        }
+
+        p.center {
+            text-align: center;
+        }
+
+        </style>
+    </head>
+    <body>
+
+        <div class="container-narrow container-narrow-header">
+
+            <ul class="nav nav-pills pull-right">
+                <li><a href="index.htm">Home</a></li>
+                <li><a href="install.htm">Install</a></li>
+                <li class="active"><a href="doc.htm">Documentation</a></li>
+            </ul>
+
+            <h1 class="title">nphp</h1>
+
+        </div>
+        <div class="container-narrow">
+
+            <hr>
+
+            <div class="row-fluid">
+                <div class="span3" id="side-nav">
+                    <ul class="nav nav-list" data-spy="affix" data-offset-top="100"> <!-- class: well -->
+                        
+                        <li class="nav-header">Installation &amp; basics</li>
+                        <li><a href="#structure">Basic structure</a></li>
+                        <li><a href="#lifecycle">Response/request lifecycle</a></li>
+                        <!--<li><a href="#phpserver">PHP built-in server</a></li>-->
+                        <li><a href="#rewrite">Rewrite rules</a></li>
+
+                        <li class="nav-header">Application object</li>
+                        <li><a href="#appproperties">Properties</a><li>
+                        <li><a href="#appmethods">Methods</a><li>
+                        <li><a href="#apprequest">Request object</a>
+                        <li><a href="#appextend">Extending application</a><li>
+                        <li><a href="#appbestpractices">Best practices</a><li>
+                        <li><a href="#apptemplates">Templates</a><li>
+                        <li><a href="#appdb">DB connectivity</a><li>
+
+                        <li class="nav-header">Routes</li>
+                        <li><a href="#routesexp">Simple regular expressions</a><li>
+                        <li><a href="#routesdata">Data from URL</a><li>
+
+                        <li class="nav-header">Controller classes</li>
+                        <li><a href="#controllerabstract">Abstract controller</a><li>
+                        <li><a href="#controllerrequest">Methods</a><li>
+                        <li><a href="#controllerreturns">Return types</a><li>
+
+                        <li class="nav-header">Custom templates</li>
+                        <li><a href="#templatessetup">Set up engine</a><li>
+                        <li><a href="#templatesbootstrap">Global variables</a><li>
+                        <li><a href="#templatescontroller">Extend controller abstract</a><li>
+
+                        <li class="nav-header">Debugging</li>
+                        <li><a href="#debugpage">Debug page</a><li>
+                        <li><a href="#debugvars">Output variables</a><li>
+
+                        <li class="nav-header">Project skeleton</li>
+                        <li><a href="#skeletondl">Download</a><li>
+                        <li><a href="#skeletonstructure">Structure</a><li>
+
+                    </ul>
+                </div>
+
+                <div class="span9">
+                    <div class="row-fluid">
+                        <div class="span12" id="scroll-pane">
+                            <!-- content -->
+
+                            <h3>Installation and basics</h3>
+
+                            <section id="structure">
+                                <h4>Structure</h4>
+                                <p>Nphp applications are usually started in <code>index.php</code> file, which acts as main entry point for each request. When deploying the projects it's best if you rewrite all incoming requests to this file. It makes urls human readable and hides technology used.</p>
+                                Only file that has to be imported is <code>nphp.php</code> - it takes care of importing everything else. In case of installation with composer you only have to require <code>vendor/autoload.php</code> for all your libraries installed with it.</p>
+                                <p>Application's entry point requires only instance of Nphp_Application or class inherited from it. Method <code>start()</code> has to be called on that object. You can find out more about Nphp_Application objects in <a href="#applicationobject">next section</a>.</p>
+                            </section>
+
+                            <br>
+
+                            <section id="lifecycle">
+                                <h4>Response/request lifecycle</h4>
+                                <p>When Nphp_Application's <code>start()</code> method is called, it tries to match requests's URL with regular expressions found in routes array. Upon match, new object is constructed from class that is mapped from matched URL. This object has to implement <a href="#controllerabstract">Nphp_ControllerAbstract abstract class</a>. Application object then calls method that corresponds to HTTP request's method - for example: if browser requesed page with GET method, <code>get()</code> will be called. <a href="#controllerrequest">Request</a>, that is of Nphp_Request class, is passed as only argument to that method. Method has to <a href="#controllerreturns">return</a> either string or Nphp_Response object. This process is also shown on flowchart below.</p><br>
+                                <p class="center"><img src="img/lifecycle.jpg" alt="" class="img-polaroid"></p>
+                            </section>
+
+                            <br>
+
+                            <section id="rewrite">
+                                <h4>mod_rewrite and rewrite rules</h4>
+                                <p>As written before, index.php is main entry point for applications, so it makes most sense if all requests are rewritten to pass through it. It makes URLs easily readable. This is possible with mod_rewrite on Apache and similar rewrite tools on other HTTP servers. Of course it shouldn't be forgotten to expose folder with static files. Below is example of such configuration for Apache, it can be either put in <code>.htaccess</code> file to be stored with full project or in virtual hosts configuration.</p>
+                                <p><pre class="prettyprint"><code class="language-php">RewriteEngine On
+
+RewriteRule ^static/.+\.(jpg|gif|png|ico|css|js)$ - [L]
+RewriteRule ^(.*)$ index.php [QSA,L]</code></pre></p>
+                            </section>
+
+                            <br>
+
+                            <h3 id="applicationobject">Application object</h3>
+
+                            <section id="appproperties">
+                                <h4>Properties</h4>
+                                <p>Different properties of Nphp_Application object allow various settings for application, from turning debugging on and off to setting custom error pages. Most of the properties can be also set with similarly named <a href="#appmethods">methods</a>.</p>
+                                <p>
+                                    List of all properties:<br>
+                                    <dl>
+
+                                        <dt><span class="label label-success" title="public">routes</span></dt>
+                                        <dd><em><a href="#routesexp">array</a></em>, maps regular expressions to controller classes</dd>
+
+                                        <dt><span class="label label-success" title="public">request</span></dt>
+                                        <dd><em><a href="#apprequest">Nphp_Request</a></em>, contains all request data needed in controllers</li></dd>
+
+                                        <dt><span class="label label-success" title="public">debug</span></dt>
+                                        <dd><em>boolean</em>, default FALSE, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
+
+                                        <dt><span class="label label-success" title="public">prefix</span></dt>
+                                        <dd><em>string</em>, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
+                                        <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
+
+                                        <dt><span class="label label-success" title="public">error404</span></dt>
+                                        <dd><em><a href="#controllerreturns">Nphp_Response</a></em>, response that is returned when error 404 is encountered, only when <code>debug</code> is set to FALSE<br>
+                                        <small>By default, instance of <code>Nphp_Response404</code> is returned, it accepts string when creating, which is returned content, HTTP response code is set to 404. Feel free to extend or reuse same class for your custom error pages.</small></dd>
+
+                                        <dt><span class="label label-success" title="public">error500</span></dt>
+                                        <dd><em><a href="#controllerreturns">Nphp_Response</a></em>, response that is returned by controller when internal server error occurs, same as error404, only when <code>debug</code> is set to FALSE<br>
+                                        <small>By default, instance of <code>Nphp_Response500</code> is returned, it accepts string when creating, which is returned content, HTTP response code is set to 500. Feel free to extend or reuse same class for your custom error pages.</small></dd>
+
+                                        <dt><span class="label label-success" title="public">disableDebugToolbar</span></dt>
+                                        <dd><em>boolean</em>, disables debug toolbar on pages, all output will be display on rendered pages, default PHP behavior, more in <a href="#debugvars">debugging</a></dd>
+
+                                        <dt><span class="label label-important" title="private">startRequestTime</span></dt>
+                                        <dd><em>float</em>, Unix time when request started, used to calculate load time on debug toolbar</dd>
+                                        
+                                    </dl>
+                                </p>
+                            </section>
+
+                            <br>
+
+                            <section id="appmethods">
+                                <h4>Methods</h4>
+                                <p>For the most part public methods have same functionallity as <a href="#appproperties">properties</a>.</p>
+                                <p>
+                                    List of all methods:<br>
+                                    <dl>
+
+                                        <dt><span class="label label-warning" title="public, must call parent's method when overriding">__construct ()</span></dt>
+                                        <dd>constructor, sets up defaults for properties and sets up <a href="#apprequest">request object</a></dd>
+
+                                        <dt><span class="label label-success" title="public">setRoutes ( array=[] )</span></dt>
+                                        <dd>sets up <a href="#routesexp">routes array</a>, that maps regular expressions to controller classes</dd>
+
+                                        <dt><span class="label label-success" title="public">setDebug ( boolean=FALSE )</span></dt>
+                                        <dd>sets <code>debug</code> property, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
+
+                                        <dt><span class="label label-success" title="public">setPrefix ( string="" )</span></dt>
+                                        <dd>sets <code>prefix</code> property, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
+                                        <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
+
+                                        <dt><span class="label label-success" title="public">bootstrap ( Nphp_Request )</span></dt>
+                                        <dd>performes additional actions needed by each controller, gets executed right before controller's method (get, post, ...) is called. It can return either nothing or <code>Nphp_Response</code> object (which becomes available in controllers as response property of request object)</dd>
+
+                                        <dt><span class="label label-warning" title="public, avoid overriding this method">start ()</span></dt>
+                                        <dd>has to be called in application's entry point file (most commonly index.php), actually starts request/response cycle, calls bootstrap method, matches URL with routes, creates controller object, calls correct method, handles errors and returns error responses if needed, sets HTTP headers, adds debug toolbar to pages if enabled. It also calls <code>autoload($className)</code> method, which can be added to only <a href="#appbestpractices">load controller classes needed by application</a> when routing is done</dd>
+                                        
+                                    </dl>
+                                </p>
+                            </section>
+
+                            <br>
+
+                            <section id="apprequest">
+                                <h4>Request object</h4>
+                                <p>For the most part public methods have same functionallity as <a href="#appproperties">properties</a>.</p>
+                                <p>
+                                    List of all methods:<br>
+                                    <dl>
+
+                                        <dt><span class="label label-warning" title="public, must call parent's method when overriding">__construct ()</span></dt>
+                                        <dd>constructor, sets up defaults for properties and sets up <a href="#apprequest">request object</a></dd>
+
+                                        <dt><span class="label label-success" title="public">setRoutes ( array=[] )</span></dt>
+                                        <dd>sets up <a href="#routesexp">routes array</a>, that maps regular expressions to controller classes</dd>
+
+                                        <dt><span class="label label-success" title="public">setDebug ( boolean=FALSE )</span></dt>
+                                        <dd>sets <code>debug</code> property, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
+
+                                        <dt><span class="label label-success" title="public">setPrefix ( string="" )</span></dt>
+                                        <dd>sets <code>prefix</code> property, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
+                                        <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
+
+                                        <dt><span class="label label-success" title="public">bootstrap ( Nphp_Request )</span></dt>
+                                        <dd>performes additional actions needed by each controller, gets executed right before controller's method (get, post, ...) is called. It can return either nothing or <code>Nphp_Response</code> object (which becomes available in controllers as response property of request object)</dd>
+
+                                        <dt><span class="label label-warning" title="public, avoid overriding this method">start ()</span></dt>
+                                        <dd>has to be called in application's entry point file (most commonly index.php), actually starts request/response cycle, calls bootstrap method, matches URL with routes, creates controller object, calls correct method, handles errors and returns error responses if needed, sets HTTP headers, adds debug toolbar to pages if enabled. It also calls <code>autoload($className)</code> method, which can be added to only <a href="#appbestpractices">load controller classes needed by application</a> when routing is done</dd>
+                                        
+                                    </dl>
+                                </p>
+                            </section>
+
+                            <!-- end content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="footer">
+                <p>&copy; Aleš Krištof 2013</p>
+            </div>
+
+        </div>
+
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/prettify.js"></script>
+        <script>
+
+            !function ($) {
+
+                $(function(){
+
+                    var $window = $(window)
+
+                    // google pretty print
+                    window.prettyPrint && prettyPrint()
+
+                    // select current title in side navigation
+                    $('body').scrollspy({target: '#side-nav'})
+
+                })
+
+            }(window.jQuery)
+
+        </script>
+    </body>
+</html>
