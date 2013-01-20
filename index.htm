@@ -7,6 +7,7 @@
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="css/prettify.css" rel="stylesheet" media="screen">
         <link href='http://fonts.googleapis.com/css?family=Oleo+Script:700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="img/favicon.png">
         <style type="text/css">
 
         body {
@@ -45,7 +46,7 @@
 
         </style>
     </head>
-    <body onload="prettyPrint()">
+    <body>
 
         <div class="container-narrow">
 
@@ -62,7 +63,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <p>Minimalistic fully object oriented PHP library for fast and easy web development.<p>
-                    <p>Provides routing and controller parts for <a href="#">MVC architecture</a>. You're free to use any <a href="#">templating engine</a> and any form of <a href="#">data storage</a> for your web applications. It's open source - <a href="http://opensource.org/licenses/MIT">MIT licensed</a>.</p><br>
+                    <p>Provides routing and controller parts for <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller">MVC architecture</a>. You're free to use any <a href="doc.htm#apptemplates">templating engine</a> and any form of <a href="doc.htm#appdb">data storage</a> for your web applications. It's open sourced, <a href="http://opensource.org/licenses/MIT">MIT licensed</a>, so possible to use in commercial applications.</p><br>
                 </div>
             </div>
 
@@ -92,8 +93,8 @@ $app->start();</code></pre>
                         <li>url routing - using native php regular expressions</li>
                         <li>simple request and response objects</li>
                         <li>easily extensible - using basic PHP OOP features</li>
-                        <li>using PHP as templating languge, but feel free to choose your own <a href="#">templating engine</a></li>
-                        <li>effortless debugging with intaractive <a href="#">debugging page</a></li>
+                        <li>using PHP as templating language, but feel free to choose your own <a href="doc.htm#apptemplates">templating engine</a></li>
+                        <li>effortless debugging with intaractive <a href="doc.htm#debugpage">debugging page</a></li>
                     </ul>
                 </div>
             </div>
@@ -109,5 +110,21 @@ $app->start();</code></pre>
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/prettify.js"></script>
+        <script>
+
+            !function ($) {
+
+                $(function(){
+
+                    var $window = $(window)
+
+                    // google pretty print
+                    window.prettyPrint && prettyPrint()
+
+                })
+
+            }(window.jQuery)
+
+        </script>
     </body>
 </html>

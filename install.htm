@@ -2,11 +2,12 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>nphp</title>
+        <title>nphp - install</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="css/prettify.css" rel="stylesheet" media="screen">
         <link href='http://fonts.googleapis.com/css?family=Oleo+Script:700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="img/favicon.png">
         <style type="text/css">
 
         body {
@@ -45,7 +46,7 @@
 
         </style>
     </head>
-    <body onload="prettyPrint()">
+    <body>
 
         <div class="container-narrow">
 
@@ -58,6 +59,13 @@
             <h1 class="title">nphp</h1>
 
             <hr>
+
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>Requirements</h4>
+                    <p>Only requirement for nphp is <strong>PHP 5.3</strong> or newer. Mod_rewrite is suggesed for deployment with Apache, although it runs on every HTTP server that supports PHP.</p>
+                </div>
+            </div>
 
             <div class="row-fluid">
                 <div class="span12">
@@ -103,7 +111,7 @@
             <div class="row-fluid">
                 <div class="span12">
                     <h4>Start developing</h4>
-                    Include/require <code>nphp.php</code> file in your <code>index.php</code> and start developing, <a href="#">read documentation</a> or try minimal application:<br>
+                    Include/require <code>nphp.php</code> file in your <code>index.php</code> and start developing, <a href="doc.htm">read documentation</a>, use <a href="doc.htm#skeletondl">project skeleton</a> for easier start or try minimal application:<br>
                     <pre class="prettyprint"><code class="language-php">&lt;?php
 
 require_once("nphp/nphp.php");
@@ -131,5 +139,21 @@ $app->start();</code></pre>
         <script src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/prettify.js"></script>
+        <script>
+
+            !function ($) {
+
+                $(function(){
+
+                    var $window = $(window)
+
+                    // google pretty print
+                    window.prettyPrint && prettyPrint()
+
+                })
+                
+            }(window.jQuery)
+
+        </script>
     </body>
 </html>
