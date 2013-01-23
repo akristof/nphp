@@ -107,9 +107,8 @@
                         <li><a href="#appmethods">Methods</a><li>
                         <li><a href="#apprequest">Request object</a>
                         <li><a href="#appextend">Extending application</a><li>
-                        <li><a href="#appbestpractices">Best practices</a><li>
-                        <li><a href="#apptemplates">Templates</a><li>
-                        <li><a href="#appdb">DB connectivity</a><li>
+                        <!--<li><a href="#appbestpractices">Best practices</a><li>-->
+                        <!--<li><a href="#appdb">DB connectivity</a><li>-->
 
                         <li class="nav-header">Routes</li>
                         <li><a href="#routesexp">Simple regular expressions</a><li>
@@ -117,8 +116,10 @@
 
                         <li class="nav-header">Controller classes</li>
                         <li><a href="#controllerabstract">Abstract controller</a><li>
-                        <li><a href="#controllerrequest">Methods</a><li>
+                        <li><a href="#controllerrequest">Request data</a><li>
                         <li><a href="#controllerreturns">Return types</a><li>
+                        <li><a href="#templates">Templates</a><li>
+                        <li><a href="#messages">Messages framework</a></li>
 
                         <li class="nav-header">Custom templates</li>
                         <li><a href="#templatessetup">Set up engine</a><li>
@@ -146,7 +147,7 @@
                             <section id="structure">
                                 <h4>Structure</h4>
                                 <p>Nphp applications are usually started in <code>index.php</code> file, which acts as main entry point for each request. When deploying the projects it's best if you rewrite all incoming requests to this file. It makes urls human readable and hides technology used.</p>
-                                Only file that has to be imported is <code>nphp.php</code> - it takes care of importing everything else. In case of installation with composer you only have to require <code>vendor/autoload.php</code> for all your libraries installed with it.</p>
+                                <p>Only file that has to be imported is <code>nphp.php</code> - it takes care of importing everything else. In case of installation with composer you only have to require <code>vendor/autoload.php</code> for all your libraries installed with it.</p>
                                 <p>Application's entry point requires only instance of Nphp_Application or class inherited from it. Method <code>start()</code> has to be called on that object. You can find out more about Nphp_Application objects in <a href="#applicationobject">next section</a>.</p>
                             </section>
 
@@ -163,10 +164,10 @@
                             <section id="rewrite">
                                 <h4>mod_rewrite and rewrite rules</h4>
                                 <p>As written before, index.php is main entry point for applications, so it makes most sense if all requests are rewritten to pass through it. It makes URLs easily readable. This is possible with mod_rewrite on Apache and similar rewrite tools on other HTTP servers. Of course it shouldn't be forgotten to expose folder with static files. Below is example of such configuration for Apache, it can be either put in <code>.htaccess</code> file to be stored with full project or in virtual hosts configuration.</p>
-                                <p><pre class="prettyprint"><code class="language-php">RewriteEngine On
+                                <pre class="prettyprint"><code class="language-php">RewriteEngine On
 
 RewriteRule ^static/.+\.(jpg|gif|png|ico|css|js)$ - [L]
-RewriteRule ^(.*)$ index.php [QSA,L]</code></pre></p>
+RewriteRule ^(.*)$ index.php [QSA,L]</code></pre>
                             </section>
 
                             <br>
@@ -184,7 +185,7 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre></p>
                                         <dd><em><a href="#routesexp">array</a></em>, maps regular expressions to controller classes</dd>
 
                                         <dt><span class="label label-success" title="public">request</span></dt>
-                                        <dd><em><a href="#apprequest">Nphp_Request</a></em>, contains all request data needed in controllers</li></dd>
+                                        <dd><em><a href="#apprequest">Nphp_Request</a></em>, contains all request data needed in controllers</dd>
 
                                         <dt><span class="label label-success" title="public">debug</span></dt>
                                         <dd><em>boolean</em>, default FALSE, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
@@ -208,7 +209,7 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre></p>
                                         <dd><em>float</em>, Unix time when request started, used to calculate load time on debug toolbar</dd>
                                         
                                     </dl>
-                                </p>
+                            </p>
                             </section>
 
                             <br>
@@ -237,7 +238,7 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre></p>
                                         <dd>performes additional actions needed by each controller, gets executed right before controller's method (get, post, ...) is called. It can return either nothing or <code>Nphp_Response</code> object (which becomes available in controllers as response property of request object)</dd>
 
                                         <dt><span class="label label-warning" title="public, avoid overriding this method">start ()</span></dt>
-                                        <dd>has to be called in application's entry point file (most commonly index.php), actually starts request/response cycle, calls bootstrap method, matches URL with routes, creates controller object, calls correct method, handles errors and returns error responses if needed, sets HTTP headers, adds debug toolbar to pages if enabled. It also calls <code>autoload($className)</code> method, which can be added to only <a href="#appbestpractices">load controller classes needed by application</a> when routing is done</dd>
+                                        <dd>has to be called in application's entry point file (most commonly index.php), actually starts request/response cycle, calls bootstrap method, matches URL with routes, creates controller object, calls correct method, handles errors and returns error responses if needed, sets HTTP headers, adds debug toolbar to pages if enabled. It also calls <code>autoload($className)</code> method, which can be added to only <a href="#appextend">load controller classes needed by application</a> when routing is done</dd>
                                         
                                     </dl>
                                 </p>
@@ -247,32 +248,141 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre></p>
 
                             <section id="apprequest">
                                 <h4>Request object</h4>
-                                <p>For the most part public methods have same functionallity as <a href="#appproperties">properties</a>.</p>
+                                <p>Request object, which is instance of Nphp_Request, gets automatically passed to <a href="#controllerrequest">controller methods</a>. It holds data of incoming request, such as URL, HTTP method, sent form data, cookies data, etc. Most of properties and methods are just aliases of built-in PHP objects and methods, they are just conveniently available in OOP manner.</p>
                                 <p>
-                                    List of all methods:<br>
+                                    Full list of properties and methods available on request objests:<br>
                                     <dl>
 
-                                        <dt><span class="label label-warning" title="public, must call parent's method when overriding">__construct ()</span></dt>
-                                        <dd>constructor, sets up defaults for properties and sets up <a href="#apprequest">request object</a></dd>
+                                        <dt><span class="label label-success" title="public">url</span></dt>
+                                        <dd><em>string</em>, path part of the URL that was requested</dd>
 
-                                        <dt><span class="label label-success" title="public">setRoutes ( array=[] )</span></dt>
-                                        <dd>sets up <a href="#routesexp">routes array</a>, that maps regular expressions to controller classes</dd>
+                                        <dt><span class="label label-success" title="public">method</span></dt>
+                                        <dd><em>string</em>, HTTP method of request</dd>
 
-                                        <dt><span class="label label-success" title="public">setDebug ( boolean=FALSE )</span></dt>
-                                        <dd>sets <code>debug</code> property, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
+                                        <dt><span class="label label-success" title="public">response</span></dt>
+                                        <dd><em>Nphp_Response</em>, <a href="#controllerreturns">default response</a> object that will be used for server's response, it's used for setting response headers (content, code, cookies, ...)</dd>
 
-                                        <dt><span class="label label-success" title="public">setPrefix ( string="" )</span></dt>
-                                        <dd>sets <code>prefix</code> property, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
-                                        <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
+                                        <dt><span class="label label-success" title="public">args</span></dt>
+                                        <dd><em>array</em>, array of arguments from regular expression matches in routes<br>
+                                        <small>For example if you have <code>'^/edit/(?P&lt;user&gt;\w+)/(\d+)/$' => 'EditUserController'</code> in your routes and you access <code>/edit/testuser/7/</code>, args will look like:</small>
+                                        <pre class="prettyprint"><code class="language-php">Array
+(
+    ["user"] => "testuser"
+    [1] => "testuser"
+    [2] => 7
+)</code></pre>
+                                        </dd>
 
-                                        <dt><span class="label label-success" title="public">bootstrap ( Nphp_Request )</span></dt>
-                                        <dd>performes additional actions needed by each controller, gets executed right before controller's method (get, post, ...) is called. It can return either nothing or <code>Nphp_Response</code> object (which becomes available in controllers as response property of request object)</dd>
+                                        <dt><span class="label label-success" title="public">cookies</span></dt>
+                                        <dd><em>array</em>, array of cookies, alias of <a href="http://php.net/manual/en/reserved.variables.cookies.php"><code>$_COOKIES</code></a></dd>
 
-                                        <dt><span class="label label-warning" title="public, avoid overriding this method">start ()</span></dt>
-                                        <dd>has to be called in application's entry point file (most commonly index.php), actually starts request/response cycle, calls bootstrap method, matches URL with routes, creates controller object, calls correct method, handles errors and returns error responses if needed, sets HTTP headers, adds debug toolbar to pages if enabled. It also calls <code>autoload($className)</code> method, which can be added to only <a href="#appbestpractices">load controller classes needed by application</a> when routing is done</dd>
+                                        <dt><span class="label label-success" title="public">files</span></dt>
+                                        <dd><em>array</em>, array of uploaded files, alias of <a href="http://php.net/manual/en/reserved.variables.files.php"><code>$_FILES</code></a></dd>
+
+                                        <dt><span class="label label-success" title="public">post</span></dt>
+                                        <dd><em>array</em>, array of POST variables, alias of <a href="http://php.net/manual/en/reserved.variables.post.php"><code>$_POST</code></a></dd>
                                         
+                                        <dt><span class="label label-success" title="public">get</span></dt>
+                                        <dd><em>array</em>, array of GET variables, alias of <a href="http://php.net/manual/en/reserved.variables.get.php"><code>$_GET</code></a></dd>
+
+                                        <dt><span class="label label-success" title="public">request</span></dt>
+                                        <dd><em>array</em>, array of all request variables, combined POST, GET and COOKIE variables, alias of <a href="http://php.net/manual/en/reserved.variables.request.php"><code>$_REQUEST</code></a></dd>
+
+                                        <dt><span class="label label-success" title="public">session</span></dt>
+                                        <dd><em>array</em>, array of session variables, alias of <a href="http://php.net/manual/en/reserved.variables.session.php"><code>$_SESSION</code></a></dd>
+
+                                        <dt><span class="label label-success" title="public">is_xhr</span></dt>
+                                        <dd><em>boolean</em>, set to TRUE if <code>X-Requested-With</code> header is set to <code>"XMLHttpRequest"</code>, supported by modern JavaScript libraries</dd>
+
+                                        <dt><span class="label label-success" title="public">setSessionValue ( key=Object, value=Object )</span></dt>
+                                        <dd>sets value of PHP session variable, shortcut for <code>$_SESSION[key] = value;</code></dd>
+
+                                        <dt><span class="label label-success" title="public">getSessionValue ( key=Object )</span></dt>
+                                        <dd>returns value of PHP session variable, same as <code>$value = $_SESSION[key];</code></dd>
+
+                                        <dt><span class="label label-success" title="public">removeSessionValue ( key=Object )</span></dt>
+                                        <dd>unsets PHP session variable</dd>
+
+                                        <dt><span class="label label-success" title="public">removeSessionValue ( key=Object )</span></dt>
+                                        <dd><em>boolean</em>, returns TRUE if PHP session variable (key in session array) exists</dd>
+
+                                        <dt><span class="label label-success" title="public">addMessage ( message=Object )</span></dt>
+                                        <dd>adds flash message to current session, more info available <a href="#messages">here</a></dd>
+
+                                        <dt><span class="label label-success" title="public">getMessages ( message=Object )</span></dt>
+                                        <dd><em>array</em>, gets and deletes all flash messages from current session, more info available <a href="#messages">here</a></dd>
+
                                     </dl>
                                 </p>
+                            </section>
+
+                            <br>
+
+                            <section id="appextend">
+                                <h4>Extending application</h4>
+                                <p>Default application class is enough for small projects, but slightly bigger projects usually need more common objects needed in each request, that have to be available in controllers. One such example is database connection and another initialization of templating engine. Best option and most object oriented approach is subclassing <code>Nphp_Application</code> class and extending it for your own needs.</p>
+                                <p>You're free to overwrite application's constructor, but be sure you call parent's <code>__construct</code> method.</p>
+                                <p>Most useful method for setting up everything is <code>bootstrap</code>, which is called every time just before controller's method is called. It gets passed one parameter - which is default <a href="#apprequest">request object</a>. It can either return nothing or your own response that has to be Nphp_Response object. It will be used further on in each controller method call.</p>
+                                <p>Another useful method which you can use is <code>autoload</code>. It gets called when URL path is matched to routing array and match is found. Controller's class name is then passed to it as a string and that can help you load appropriate class. It can return string with new name of class to import.</p>
+                                <p>Example of such extended class and its usage:<br>
+                                <pre class="prettyprint"><code class="language-php">class MyApplication extends Nphp_Application {
+
+    public function __construct() {
+        parent::__construct();
+        // additional constructor code
+    }
+
+    public function __destruct() {
+        // useful for closing database connections, file references, etc.
+    }
+
+    public function bootstrap($request) {
+        $request->newParameter = "this will be available in controller";  
+        return $request->response;
+    }
+
+    public function autoload($class) {
+        require_once("controllers/{$class}.php");
+    }
+
+}
+
+$application = new MyApplication();
+$application->start();</code></pre>
+
+                                </p>
+                            </section>
+
+                            <br>
+
+                            <h3 id="routes">Routes</h3>
+
+                            <section id="routesexp">
+                                <h4>Simple regular expressions</h4>
+                                <p>Routes are represented as simple PHP array object, mapping paths to controller classes. When each request is processed, it first gets matched, in order, to each element in this array. Matching is done with <code>preg_match</code> method, so regular expressions can be used for matching.</p>
+                                <p>Examples of simple expressions:<br>
+                                <pre class="prettyprint"><code class="language-php">$app->setRoutes(array(
+    '^/$' => 'IndexController',
+    '^/news/$' => 'NewsController',
+    '^/news/1363/$' => 'NewsController'
+));</code></pre>
+                                </p>
+                                <p>It is recommended to start each route with <code>^</code> and end with <code>$</code>, they are special regular expression characters, representing start and end of string, respectively.</p>
+                            </section>
+
+                            <br>
+
+                            <section id="routesdata">
+                                <h4>Data from URL</h4>
+                                <p>Routes are represented as simple PHP array object, mapping paths to controller classes. When each request is processed, it first gets matched, in order, to each element in this array. Matching is done with <code>preg_match</code> method, so regular expressions can be used for matching.</p>
+                                <p>Examples of simple expressions:<br>
+                                <pre class="prettyprint"><code class="language-php">$app->setRoutes(array(
+    '^/$' => 'IndexController',
+    '^/news/$' => 'NewsController',
+    '^/news/1363/$' => 'NewsController'
+));</code></pre>
+                                </p>
+                                <p>It is recommended to start each route with <code>^</code> and end with <code>$</code>, they are special regular expression characters, representing start and end of string, respectively.</p>
                             </section>
 
                             <!-- end content -->
