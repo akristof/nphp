@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="css/prettify.css" rel="stylesheet" media="screen">
-        <link href='http://fonts.googleapis.com/css?family=Oleo+Script:700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Oleo+Script:700&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="img/favicon.png">
         <style type="text/css">
 
@@ -178,38 +178,38 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre>
                                 <h4>Properties</h4>
                                 <p>Different properties of Nphp_Application object allow various settings for application, from turning debugging on and off to setting custom error pages. Most of the properties can be also set with similarly named <a href="#appmethods">methods</a>.</p>
                                 <p>
-                                    List of all properties:<br>
-                                    <dl>
+                                    List of all properties:
+                                </p>
+                                <dl>
 
-                                        <dt><span class="label label-success" title="public">routes</span></dt>
-                                        <dd><em><a href="#routesexp">array</a></em>, maps regular expressions to controller classes</dd>
+                                    <dt><span class="label label-success" title="public">routes</span></dt>
+                                    <dd><em><a href="#routesexp">array</a></em>, maps regular expressions to controller classes</dd>
 
-                                        <dt><span class="label label-success" title="public">request</span></dt>
-                                        <dd><em><a href="#apprequest">Nphp_Request</a></em>, contains all request data needed in controllers</dd>
+                                    <dt><span class="label label-success" title="public">request</span></dt>
+                                    <dd><em><a href="#apprequest">Nphp_Request</a></em>, contains all request data needed in controllers</dd>
 
-                                        <dt><span class="label label-success" title="public">debug</span></dt>
-                                        <dd><em>boolean</em>, default FALSE, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
+                                    <dt><span class="label label-success" title="public">debug</span></dt>
+                                    <dd><em>boolean</em>, default FALSE, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
 
-                                        <dt><span class="label label-success" title="public">prefix</span></dt>
-                                        <dd><em>string</em>, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
-                                        <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
+                                    <dt><span class="label label-success" title="public">prefix</span></dt>
+                                    <dd><em>string</em>, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
+                                    <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
 
-                                        <dt><span class="label label-success" title="public">error404</span></dt>
-                                        <dd><em><a href="#controllerreturns">Nphp_Response</a></em>, response that is returned when error 404 is encountered, only when <code>debug</code> is set to FALSE<br>
-                                        <small>By default, instance of <code>Nphp_Response404</code> is returned, it accepts string when creating, which is returned content, HTTP response code is set to 404. Feel free to extend or reuse same class for your custom error pages.</small></dd>
+                                    <dt><span class="label label-success" title="public">error404</span></dt>
+                                    <dd><em><a href="#controllerreturns">Nphp_Response</a></em>, response that is returned when error 404 is encountered, only when <code>debug</code> is set to FALSE<br>
+                                    <small>By default, instance of <code>Nphp_Response404</code> is returned, it accepts string when creating, which is returned content, HTTP response code is set to 404. Feel free to extend or reuse same class for your custom error pages.</small></dd>
 
-                                        <dt><span class="label label-success" title="public">error500</span></dt>
-                                        <dd><em><a href="#controllerreturns">Nphp_Response</a></em>, response that is returned by controller when internal server error occurs, same as error404, only when <code>debug</code> is set to FALSE<br>
-                                        <small>By default, instance of <code>Nphp_Response500</code> is returned, it accepts string when creating, which is returned content, HTTP response code is set to 500. Feel free to extend or reuse same class for your custom error pages.</small></dd>
+                                    <dt><span class="label label-success" title="public">error500</span></dt>
+                                    <dd><em><a href="#controllerreturns">Nphp_Response</a></em>, response that is returned by controller when internal server error occurs, same as error404, only when <code>debug</code> is set to FALSE<br>
+                                    <small>By default, instance of <code>Nphp_Response500</code> is returned, it accepts string when creating, which is returned content, HTTP response code is set to 500. Feel free to extend or reuse same class for your custom error pages.</small></dd>
 
-                                        <dt><span class="label label-success" title="public">disableDebugToolbar</span></dt>
-                                        <dd><em>boolean</em>, disables debug toolbar on pages, all output will be display on rendered pages, default PHP behavior, more in <a href="#debugvars">debugging</a></dd>
+                                    <dt><span class="label label-success" title="public">disableDebugToolbar</span></dt>
+                                    <dd><em>boolean</em>, disables debug toolbar on pages, all output will be display on rendered pages, default PHP behavior, more in <a href="#debugvars">debugging</a></dd>
 
-                                        <dt><span class="label label-important" title="private">startRequestTime</span></dt>
-                                        <dd><em>float</em>, Unix time when request started, used to calculate load time on debug toolbar</dd>
-                                        
-                                    </dl>
-                            </p>
+                                    <dt><span class="label label-important" title="private">startRequestTime</span></dt>
+                                    <dd><em>float</em>, Unix time when request started, used to calculate load time on debug toolbar</dd>
+                                    
+                                </dl>
                             </section>
 
                             <br>
@@ -217,31 +217,29 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre>
                             <section id="appmethods">
                                 <h4>Methods</h4>
                                 <p>For the most part public methods have same functionallity as <a href="#appproperties">properties</a>.</p>
-                                <p>
-                                    List of all methods:<br>
-                                    <dl>
+                                <p>List of all methods:</p>
+                                <dl>
 
-                                        <dt><span class="label label-warning" title="public, must call parent's method when overriding">__construct ()</span></dt>
-                                        <dd>constructor, sets up defaults for properties and sets up <a href="#apprequest">request object</a></dd>
+                                    <dt><span class="label label-warning" title="public, must call parent's method when overriding">__construct ()</span></dt>
+                                    <dd>constructor, sets up defaults for properties and sets up <a href="#apprequest">request object</a></dd>
 
-                                        <dt><span class="label label-success" title="public">setRoutes ( array=[] )</span></dt>
-                                        <dd>sets up <a href="#routesexp">routes array</a>, that maps regular expressions to controller classes</dd>
+                                    <dt><span class="label label-success" title="public">setRoutes ( array=[] )</span></dt>
+                                    <dd>sets up <a href="#routesexp">routes array</a>, that maps regular expressions to controller classes</dd>
 
-                                        <dt><span class="label label-success" title="public">setDebug ( boolean=FALSE )</span></dt>
-                                        <dd>sets <code>debug</code> property, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
+                                    <dt><span class="label label-success" title="public">setDebug ( boolean=FALSE )</span></dt>
+                                    <dd>sets <code>debug</code> property, if set to TRUE, <a href="#debuggingpage">debugging page</a> will be displayed instead of error page and correct HTTP response code</dd>
 
-                                        <dt><span class="label label-success" title="public">setPrefix ( string="" )</span></dt>
-                                        <dd>sets <code>prefix</code> property, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
-                                        <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
+                                    <dt><span class="label label-success" title="public">setPrefix ( string="" )</span></dt>
+                                    <dd>sets <code>prefix</code> property, prefix that will be automatically added to all routes if application is not located directly on domain or subdomain<br>
+                                    <small>For example: <code>"/prefix"</code> to match requests on <code>http://example.com/prefix/*</code></small></dd>
 
-                                        <dt><span class="label label-success" title="public">bootstrap ( Nphp_Request )</span></dt>
-                                        <dd>performes additional actions needed by each controller, gets executed right before controller's method (get, post, ...) is called. It can return either nothing or <code>Nphp_Response</code> object (which becomes available in controllers as response property of request object)</dd>
+                                    <dt><span class="label label-success" title="public">bootstrap ( Nphp_Request )</span></dt>
+                                    <dd>performes additional actions needed by each controller, gets executed right before controller's method (get, post, ...) is called. It can return either nothing or <code>Nphp_Response</code> object (which becomes available in controllers as response property of request object)</dd>
 
-                                        <dt><span class="label label-warning" title="public, avoid overriding this method">start ()</span></dt>
-                                        <dd>has to be called in application's entry point file (most commonly index.php), actually starts request/response cycle, calls bootstrap method, matches URL with routes, creates controller object, calls correct method, handles errors and returns error responses if needed, sets HTTP headers, adds debug toolbar to pages if enabled. It also calls <code>autoload($className)</code> method, which can be added to only <a href="#appextend">load controller classes needed by application</a> when routing is done</dd>
-                                        
-                                    </dl>
-                                </p>
+                                    <dt><span class="label label-warning" title="public, avoid overriding this method">start ()</span></dt>
+                                    <dd>has to be called in application's entry point file (most commonly index.php), actually starts request/response cycle, calls bootstrap method, matches URL with routes, creates controller object, calls correct method, handles errors and returns error responses if needed, sets HTTP headers, adds debug toolbar to pages if enabled. It also calls <code>autoload($className)</code> method, which can be added to only <a href="#appextend">load controller classes needed by application</a> when routing is done</dd>
+                                    
+                                </dl>
                             </section>
 
                             <br>
@@ -249,71 +247,69 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre>
                             <section id="apprequest">
                                 <h4>Request object</h4>
                                 <p>Request object, which is instance of Nphp_Request, gets automatically passed to <a href="#controllerrequest">controller methods</a>. It holds data of incoming request, such as URL, HTTP method, sent form data, cookies data, etc. Most of properties and methods are just aliases of built-in PHP objects and methods, they are just conveniently available in OOP manner.</p>
-                                <p>
-                                    Full list of properties and methods available on request objests:<br>
-                                    <dl>
+                                <p>Full list of properties and methods available on request objests:</p>
+                                <dl>
 
-                                        <dt><span class="label label-success" title="public">url</span></dt>
-                                        <dd><em>string</em>, path part of the URL that was requested</dd>
+                                    <dt><span class="label label-success" title="public">url</span></dt>
+                                    <dd><em>string</em>, path part of the URL that was requested</dd>
 
-                                        <dt><span class="label label-success" title="public">method</span></dt>
-                                        <dd><em>string</em>, HTTP method of request</dd>
+                                    <dt><span class="label label-success" title="public">method</span></dt>
+                                    <dd><em>string</em>, HTTP method of request</dd>
 
-                                        <dt><span class="label label-success" title="public">response</span></dt>
-                                        <dd><em>Nphp_Response</em>, <a href="#controllerreturns">default response</a> object that will be used for server's response, it's used for setting response headers (content, code, cookies, ...)</dd>
+                                    <dt><span class="label label-success" title="public">response</span></dt>
+                                    <dd><em>Nphp_Response</em>, <a href="#controllerreturns">default response</a> object that will be used for server's response, it's used for setting response headers (content, code, cookies, ...)</dd>
 
-                                        <dt><span class="label label-success" title="public">args</span></dt>
-                                        <dd><em>array</em>, array of arguments from regular expression matches in routes<br>
-                                        <small>For example if you have <code>'^/edit/(?P&lt;user&gt;\w+)/(\d+)/$' => 'EditUserController'</code> in your routes and you access <code>/edit/testuser/7/</code>, args will look like:</small>
-                                        <pre class="prettyprint"><code class="language-php">Array
+                                    <dt><span class="label label-success" title="public">args</span></dt>
+                                    <dd><em>array</em>, array of arguments from regular expression matches in routes<br>
+                                    <small>For example if you have <code>'^/edit/(?P&lt;user&gt;\w+)/(\d+)/$' => 'EditUserController'</code> in your routes and you access <code>/edit/testuser/7/</code>, args will look like:</small>
+                                    <pre class="prettyprint"><code class="language-php">Array
 (
-    ["user"] => "testuser"
-    [1] => "testuser"
-    [2] => 7
+["user"] => "testuser"
+[1] => "testuser"
+[2] => 7
 )</code></pre>
-                                        </dd>
+                                    </dd>
 
-                                        <dt><span class="label label-success" title="public">cookies</span></dt>
-                                        <dd><em>array</em>, array of cookies, alias of <a href="http://php.net/manual/en/reserved.variables.cookies.php"><code>$_COOKIES</code></a></dd>
+                                    <dt><span class="label label-success" title="public">cookies</span></dt>
+                                    <dd><em>array</em>, array of cookies, alias of <a href="http://php.net/manual/en/reserved.variables.cookies.php"><code>$_COOKIES</code></a></dd>
 
-                                        <dt><span class="label label-success" title="public">files</span></dt>
-                                        <dd><em>array</em>, array of uploaded files, alias of <a href="http://php.net/manual/en/reserved.variables.files.php"><code>$_FILES</code></a></dd>
+                                    <dt><span class="label label-success" title="public">files</span></dt>
+                                    <dd><em>array</em>, array of uploaded files, alias of <a href="http://php.net/manual/en/reserved.variables.files.php"><code>$_FILES</code></a></dd>
 
-                                        <dt><span class="label label-success" title="public">post</span></dt>
-                                        <dd><em>array</em>, array of POST variables, alias of <a href="http://php.net/manual/en/reserved.variables.post.php"><code>$_POST</code></a></dd>
-                                        
-                                        <dt><span class="label label-success" title="public">get</span></dt>
-                                        <dd><em>array</em>, array of GET variables, alias of <a href="http://php.net/manual/en/reserved.variables.get.php"><code>$_GET</code></a></dd>
+                                    <dt><span class="label label-success" title="public">post</span></dt>
+                                    <dd><em>array</em>, array of POST variables, alias of <a href="http://php.net/manual/en/reserved.variables.post.php"><code>$_POST</code></a></dd>
+                                    
+                                    <dt><span class="label label-success" title="public">get</span></dt>
+                                    <dd><em>array</em>, array of GET variables, alias of <a href="http://php.net/manual/en/reserved.variables.get.php"><code>$_GET</code></a></dd>
 
-                                        <dt><span class="label label-success" title="public">request</span></dt>
-                                        <dd><em>array</em>, array of all request variables, combined POST, GET and COOKIE variables, alias of <a href="http://php.net/manual/en/reserved.variables.request.php"><code>$_REQUEST</code></a></dd>
+                                    <dt><span class="label label-success" title="public">request</span></dt>
+                                    <dd><em>array</em>, array of all request variables, combined POST, GET and COOKIE variables, alias of <a href="http://php.net/manual/en/reserved.variables.request.php"><code>$_REQUEST</code></a></dd>
 
-                                        <dt><span class="label label-success" title="public">session</span></dt>
-                                        <dd><em>array</em>, array of session variables, alias of <a href="http://php.net/manual/en/reserved.variables.session.php"><code>$_SESSION</code></a></dd>
+                                    <dt><span class="label label-success" title="public">session</span></dt>
+                                    <dd><em>array</em>, array of session variables, alias of <a href="http://php.net/manual/en/reserved.variables.session.php"><code>$_SESSION</code></a></dd>
 
-                                        <dt><span class="label label-success" title="public">is_xhr</span></dt>
-                                        <dd><em>boolean</em>, set to TRUE if <code>X-Requested-With</code> header is set to <code>"XMLHttpRequest"</code>, supported by modern JavaScript libraries</dd>
+                                    <dt><span class="label label-success" title="public">is_xhr</span></dt>
+                                    <dd><em>boolean</em>, set to TRUE if <code>X-Requested-With</code> header is set to <code>"XMLHttpRequest"</code>, supported by modern JavaScript libraries</dd>
 
-                                        <dt><span class="label label-success" title="public">setSessionValue ( key=Object, value=Object )</span></dt>
-                                        <dd>sets value of PHP session variable, shortcut for <code>$_SESSION[key] = value;</code></dd>
+                                    <dt><span class="label label-success" title="public">setSessionValue ( key=Object, value=Object )</span></dt>
+                                    <dd>sets value of PHP session variable, shortcut for <code>$_SESSION[key] = value;</code></dd>
 
-                                        <dt><span class="label label-success" title="public">getSessionValue ( key=Object )</span></dt>
-                                        <dd>returns value of PHP session variable, same as <code>$value = $_SESSION[key];</code></dd>
+                                    <dt><span class="label label-success" title="public">getSessionValue ( key=Object )</span></dt>
+                                    <dd>returns value of PHP session variable, same as <code>$value = $_SESSION[key];</code></dd>
 
-                                        <dt><span class="label label-success" title="public">removeSessionValue ( key=Object )</span></dt>
-                                        <dd>unsets PHP session variable</dd>
+                                    <dt><span class="label label-success" title="public">removeSessionValue ( key=Object )</span></dt>
+                                    <dd>unsets PHP session variable</dd>
 
-                                        <dt><span class="label label-success" title="public">removeSessionValue ( key=Object )</span></dt>
-                                        <dd><em>boolean</em>, returns TRUE if PHP session variable (key in session array) exists</dd>
+                                    <dt><span class="label label-success" title="public">removeSessionValue ( key=Object )</span></dt>
+                                    <dd><em>boolean</em>, returns TRUE if PHP session variable (key in session array) exists</dd>
 
-                                        <dt><span class="label label-success" title="public">addMessage ( message=Object )</span></dt>
-                                        <dd>adds flash message to current session, more info available <a href="#messages">here</a></dd>
+                                    <dt><span class="label label-success" title="public">addMessage ( message=Object )</span></dt>
+                                    <dd>adds flash message to current session, more info available <a href="#messages">here</a></dd>
 
-                                        <dt><span class="label label-success" title="public">getMessages ( message=Object )</span></dt>
-                                        <dd><em>array</em>, gets and deletes all flash messages from current session, more info available <a href="#messages">here</a></dd>
+                                    <dt><span class="label label-success" title="public">getMessages ( message=Object )</span></dt>
+                                    <dd><em>array</em>, gets and deletes all flash messages from current session, more info available <a href="#messages">here</a></dd>
 
-                                    </dl>
-                                </p>
+                                </dl>
                             </section>
 
                             <br>
@@ -324,7 +320,7 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre>
                                 <p>You're free to overwrite application's constructor, but be sure you call parent's <code>__construct</code> method.</p>
                                 <p>Most useful method for setting up everything is <code>bootstrap</code>, which is called every time just before controller's method is called. It gets passed one parameter - which is default <a href="#apprequest">request object</a>. It can either return nothing or your own response that has to be Nphp_Response object. It will be used further on in each controller method call.</p>
                                 <p>Another useful method which you can use is <code>autoload</code>. It gets called when URL path is matched to routing array and match is found. Controller's class name is then passed to it as a string and that can help you load appropriate class. It can return string with new name of class to import.</p>
-                                <p>Example of such extended class and its usage:<br>
+                                <p>Example of such extended class and its usage:</p>
                                 <pre class="prettyprint"><code class="language-php">class MyApplication extends Nphp_Application {
 
     public function __construct() {
@@ -349,8 +345,6 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre>
 
 $application = new MyApplication();
 $application->start();</code></pre>
-
-                                </p>
                             </section>
 
                             <br>
@@ -360,13 +354,12 @@ $application->start();</code></pre>
                             <section id="routesexp">
                                 <h4>Simple regular expressions</h4>
                                 <p>Routes are represented as simple PHP array object, mapping paths to controller classes. When each request is processed, it first gets matched, in order, to each element in this array. Matching is done with <code>preg_match</code> method, so regular expressions can be used for matching.</p>
-                                <p>Examples of simple expressions:<br>
+                                <p>Examples of simple expressions:</p>
                                 <pre class="prettyprint"><code class="language-php">$app->setRoutes(array(
     '^/$' => 'IndexController',
     '^/news/$' => 'NewsController',
     '^/news/1363/$' => 'NewsController'
 ));</code></pre>
-                                </p>
                                 <p>It is recommended to start each route with <code>^</code> and end with <code>$</code>, they are special regular expression characters, representing start and end of string, respectively.</p>
                             </section>
 
@@ -374,16 +367,27 @@ $application->start();</code></pre>
 
                             <section id="routesdata">
                                 <h4>Data from URL</h4>
+                                <p>Applications sometimes require dynamic urls, for example we created controller for editing blog posts, now we want it to be accessible and get blog post ID from url: <code>/blog/edit/123/</code>. Because routes are regular expressions, the solution is simple - we match <code>^/blog/edit/(\d+)/$</code>. <code>(\d+)</code> matches at least one number so this will match our path. This match result (number) will be available in controller as <code>$request->args[1]</code>, which we can use for setting up database query.</p>
+                                <p>Named matches can also be used - in example above we could use <code>^/blog/edit/(?P&lt;blogid&gt;\d+)$</code>. In this case match data would be found in <code>$request->args["blogid"]</code>.
+                                <p>More info on PHP's regular expressions can be found on <a href="http://php.net/manual/en/reference.pcre.pattern.syntax.php">their official page</a></p>
+                                
+                            </section>
+
+                            <br>
+
+                            <h3>Controller classes</h3>
+
+                            <!--<section id="controllerabstract">
+                                <h4>Abstract controller</h4>
                                 <p>Routes are represented as simple PHP array object, mapping paths to controller classes. When each request is processed, it first gets matched, in order, to each element in this array. Matching is done with <code>preg_match</code> method, so regular expressions can be used for matching.</p>
-                                <p>Examples of simple expressions:<br>
+                                <p>Examples of simple expressions:</p>
                                 <pre class="prettyprint"><code class="language-php">$app->setRoutes(array(
     '^/$' => 'IndexController',
     '^/news/$' => 'NewsController',
     '^/news/1363/$' => 'NewsController'
 ));</code></pre>
-                                </p>
                                 <p>It is recommended to start each route with <code>^</code> and end with <code>$</code>, they are special regular expression characters, representing start and end of string, respectively.</p>
-                            </section>
+                            </section>-->
 
                             <!-- end content -->
                         </div>
