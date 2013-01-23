@@ -118,6 +118,7 @@
                         <li><a href="#controllerabstract">Abstract controller</a><li>
                         <li><a href="#controllerrequest">Request data</a><li>
                         <li><a href="#controllerreturns">Return types</a><li>
+                        <li><a href="#controllerresponse">Response object</a><li>
                         <li><a href="#templates">Templates</a><li>
                         <li><a href="#messages">Messages framework</a></li>
 
@@ -306,7 +307,7 @@ RewriteRule ^(.*)$ index.php [QSA,L]</code></pre>
                                     <dt><span class="label label-success" title="public">addMessage ( message=Object )</span></dt>
                                     <dd>adds flash message to current session, more info available <a href="#messages">here</a></dd>
 
-                                    <dt><span class="label label-success" title="public">getMessages ( message=Object )</span></dt>
+                                    <dt><span class="label label-success" title="public">getMessages ()</span></dt>
                                     <dd><em>array</em>, gets and deletes all flash messages from current session, more info available <a href="#messages">here</a></dd>
 
                                 </dl>
@@ -377,17 +378,231 @@ $application->start();</code></pre>
 
                             <h3>Controller classes</h3>
 
-                            <!--<section id="controllerabstract">
+                            <section id="controllerabstract">
                                 <h4>Abstract controller</h4>
-                                <p>Routes are represented as simple PHP array object, mapping paths to controller classes. When each request is processed, it first gets matched, in order, to each element in this array. Matching is done with <code>preg_match</code> method, so regular expressions can be used for matching.</p>
-                                <p>Examples of simple expressions:</p>
-                                <pre class="prettyprint"><code class="language-php">$app->setRoutes(array(
-    '^/$' => 'IndexController',
-    '^/news/$' => 'NewsController',
-    '^/news/1363/$' => 'NewsController'
-));</code></pre>
-                                <p>It is recommended to start each route with <code>^</code> and end with <code>$</code>, they are special regular expression characters, representing start and end of string, respectively.</p>
-                            </section>-->
+                                <p>Controller classes that routes are mapped to have to extend Nphp_ControllerAbstract, either directly or indirectly. This means it can be used as a base for your own controller abstract classes where additional features that are shared among controllers are implemented. Most basic example is extending nphp to support <a href="#customtemplates">templating engine of your choice</a> or create method to convert data to JSON format for your API.</p>
+                                <p>In each instance of our controller we have to create methods that match HTTP methods we want to support on that URL. For example if we want server to respond only to <strong>GET methods</strong> create <code>get($request)</code> method. You're free to implement any method you want, as long as it's supported by your HTTP server. There is special method that responds to <strong>any method</strong>: <code>all($request)</code>.</p>
+                                <p>Default controller has only few properties and methods:</p>
+                                <dl>
+
+                                    <dt><span class="label label-success" title="public">_application</span></dt>
+                                    <dd><em>Nphp_Application</em>, application that called this controller</dd>
+
+                                    <dt><span class="label label-success" title="public">request</span></dt>
+                                    <dd><em>Nphp_Request</em>, another way to access <a href="#apprequest">request object</a></dd>
+
+                                    <dt><span class="label label-success" title="public">render ( template=string, context=array )</span></dt>
+                                    <dd><em>Nphp_Response</em>, method that takes template name, which is PHP file, as a string, extracts variables from context array so they're available in template and returns response with rendered template set as content</dd>
+
+                                    <dt><span class="label label-success" title="public">redirect ( url=string )</span></dt>
+                                    <dd><em>Nphp_ResponseRedirect</em>, returns response object that creates HTTP redirect (302) to specified url</dd>
+
+                                </dl>
+                                <p>Example of simple controller class that accepts GET and POST methods:</p>
+                                <pre class="prettyprint"><code class="language-php">class IndexController extends Nphp_ControllerAbstract {
+    public function get($request) {
+        // output simple text
+        return "Hello world!";
+    }
+    public function post($request) {
+        // redirect to index
+        return $this->redirect("/");
+    }
+}</code></pre>
+                            </section>
+
+                            <br>
+
+                            <section id="controllerrequest">
+                                <h4>Request data</h4>
+                                <p>Each controller needs access to data that was sent with request and most of it is accessible from <a href="#apprequest">request object</a> that is passed to methods as parameter or available as controller property: <code>$this->request</code>. This data can be used to create database queries and other logic usually found in controllers.</p>
+                            </section>
+
+                            <br>
+
+                            <section id="controllerreturns">
+                                <h4>Return types</h4>
+                                <p>Controller methods can return two different types of objects. First is <a href="#controllerresponse">Nphp_Response</a> object and other is simple string. If string is returned, nphp will construct new response object with default values. If Nphp_Response is returned its data will be used when sending response.</p>
+                                <p>When request object is created, it also creates default response object, which can be used to manipulate response in controllers - for instance if we want to change output headers.</p>
+                            </section>
+
+                            <br>
+
+                            <section id="controllerresponse">
+                                <h4>Response object</h4>
+                                <p>All response objects have some properties and methods for convenience. Values that are always needed by nphp have default values but feel free to change them. Here is list of these properties:</p>
+                                <dl>
+
+                                    <dt><span class="label label-success" title="public">code</span></dt>
+                                    <dd><em>integer</em>, HTTP status code, default is <strong>200</strong></dd>
+
+                                    <dt><span class="label label-success" title="public">headers</span></dt>
+                                    <dd><em>array</em>, array of strings, headers that will be sent with response, there is one in by default: <strong>"Content-type: text/html; charset=UTF-8"</strong></dd>
+
+                                    <dt><span class="label label-success" title="public">content</span></dt>
+                                    <dd><em>string</em>, already rendered content that will be sent as body</dd>
+
+                                    <dt><span class="label label-success" title="public">cookies</span></dt>
+                                    <dd><em>array</em>, array of current cookies that were sent with request, alias of <code>$_COOKIES</code></dd>
+
+                                    <dt><span class="label label-success" title="public">newCookies</span></dt>
+                                    <dd><em>array</em>, array of new cookies that will be sent with response, each cookie has to be in specific form, it's recommended to use <code>addCookie()</code> method of response object</dd>
+
+                                    <dt><span class="label label-success" title="public">setCode ( code=integer )</span></dt>
+                                    <dd>sets <code>code</code> property, which is HTTP status code for response</dd>
+
+                                    <dt><span class="label label-success" title="public">setHeaders ( headers=array )</span></dt>
+                                    <dd>sets <code>headers</code> property, which is array of strings - headers to be sent</dd>
+
+                                    <dt><span class="label label-success" title="public">addHeader ( header=string )</span></dt>
+                                    <dd>adds header to <code>headers</code> property</dd>
+
+                                    <dt><span class="label label-success" title="public">setContent ( content=string )</span></dt>
+                                    <dd>sets <code>content</code> property, that is rendered body</dd>
+
+                                    <dt><span class="label label-success" title="public">addCookie ( name=string, value=string, expire=integer, path=string, domain=string, secure=boolean, httponly=boolean )</span></dt>
+                                    <dd>helper method for setting new cookies, they get addded to <code>newCookies</code> array and then set with <a href="http://php.net/manual/en/function.setcookie.php"><code>setcookie()</code></a> PHP method. Only name is required, check PHP's setcookie for defaults and options</dd>
+
+                                </dl>
+                                <p>There are few special types of builtin response objects:</p>
+                                <ul>
+                                    <li><em>Nphp_Response404</em> - same as basic response class but with code set to <strong>404</strong>, used for missing pages</li>
+                                    <li><em>Nphp_Response500</em> - same as basic response class but with code set to <strong>500</strong>, used when server error occurs</li>
+                                    <li><em>Nphp_ResponseRedirect</em> - is used for redirecting users to different URL, code used is <strong>302 (Found)</strong>, which is common way to perform a redirection. Its constructor accepts new URL/path as paremeter</li>
+                                </ul>
+                                <p>Redirects can be used as shown above in <a href="#controllerabstract">controller example</a> or with Nphp_ResponseRedirect object:</p>
+                                <pre class="prettyprint"><code class="language-php">class IndexController extends Nphp_ControllerAbstract {
+    public function get($request) {
+        return new Nphp_ResponseRedirect("/redirect/path/");
+    }
+    public function post($request) {
+        return new Nphp_Response404("This page is missing.");
+    }
+}</code></pre>
+                            </section>
+
+                            <br>
+
+                            <section id="templates">
+                                <h4>Templates</h4>
+                                <p>Nphp doesn't have templating engine built in as we leave choice of engine to the users. For simple templating you can use basic PHP. You only need PHP file with template and call <code>render()</code> method of you controller class.</p>
+                                <p>PHP template file (template.php):</p>
+                                <pre class="prettyprint"><code class="language-php">&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;title&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;?= htmlspecialchars($username) ?&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                                <p>Controller using template.php:</p>
+                                <pre class="prettyprint"><code class="language-php">class IndexController extends ControllerAbstract {
+    public function get($request) {
+        $context = array("username" => "John Doe");
+        return $this->render("template.php", $context);
+    }
+}</code></pre>
+                                <p>Template paths are always relative to the folder containing file with <code>$application->start()</code> - so usually index.php.</p>
+                            </section>
+
+                            <br>
+
+                            <section id="messages">
+                                <h4>Messages framework</h4>
+                                <p>This framework is used when we want to send message to current user - for example notification that account was created, item deleted, etc. This messages are added to session in one controller and then read in another. When they're read they're automatically removed from session as nphp assumes they were displayed. They work best in combination with some JavaScript that makes them visible and then closes after some time.</p>
+                                <p>Messages are added and read from <a href="#apprequest">request objects</a>:</p>
+                                <pre class="prettyprint"><code class="language-php">$request->addMessage("User registration was successful!");
+$messagesArray = $request->getMessages();</code></pre>
+                            </section>
+
+                            <br>
+
+                            <h3 id="applicationobject">Custom templates</h3>
+
+                            <section id="templatessetup">
+                                <h4>Set up engine</h4>
+                                <p>Even though nphp supports basic PHP templates, this is usually not enough for bigger projects, so we encourage the use of other templating engines. There are plenty out there, but in this example we're going to use awesome <a href="http://twig.sensiolabs.org/">Twig templates</a>.</p>
+                                <p>First step in setting up this engine, after downloading the source, is to set up Twig loader and environment so they're available in each request. This is done in our <a href="#appextend">extended application class'</a> bootstrap method:</p>
+                                <pre class="prettyprint"><code class="language-php">// require Twig's autoloader
+require_once("Twig/Autoloader.php");
+// use filesystem loader - it loads templates from specified folder
+$this->twigLoader = new Twig_Loader_Filesystem("templates");
+// empty settings - we can specify default charset and other options here
+$twigSettings = array();
+// build environment from loader and settings - this is main object used to render templates
+$this->twigEnvironment = new Twig_Environment($this->twigLoader, $twigSettings);</code></pre>
+                            </section>
+
+                            <br>
+
+                            <section id="templatesbootstrap">
+                                <h4>Global variables</h4>
+                                <p>Another thing most projects use are some common variables that are needed in every page rendered, so it's best to have them defined in one place. Good examples are URL for static content, version of application, ...</p>
+                                <p>We do this by creating global context which will be later added to each controller's context, just before rendering:</p>
+                                <pre class="prettyprint"><code class="language-php">$this->globalCtx = array("staticUrl" => "http://static.example.com");</code></pre>
+                            </section>
+
+                            <section id="templatescontroller">
+                                <h4>Extend controller abstract</h4>
+                                <p>Last part needed is our own <code>render()</code> method in controllers we're going to use. Simplest way is to extend <code>Nphp_ControllerAbstract</code> and overwrite existing method. Make sure your controllers are inheriting from your new abstract class.</p>
+                                <pre class="prettyprint"><code class="language-php">abstract class MyControllerAbstract extends Nphp_ControllerAbstract {
+    public function render($template, $context) {
+        $context = array_merge($context, $this->_application->globalCtx);
+        return $this->_application->twig->render($template, $context);
+    }
+}</code></pre>
+                                <p>Use is really simple:</p>
+                                <pre class="prettyprint"><code class="language-php">class IndexController extends MyControllerAbstract {
+    public function get($request) {
+        $context = array("localVariable" => 1234);
+        return $this->render("index.twig", $context);
+    }
+}</code></pre>
+                                <pre class="prettyprint"><code class="language-php">&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;title&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;img src="{{ staticUrl }}/logo.jpg"&gt;
+        {{ localVariable }}
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                            </section>
+
+                            <h3 id="applicationobject">Debugging</h3>
+
+                            <section id="debugpage">
+                                <h4>Debug page</h4>
+                                <p>While it's certainly possible to use debugger with nphp, there's another built-in tool that makes developers' life easier - debug page. When debug option of application is set to TRUE and error is encountered on page you'll get nice debugging output, with full stack trace, local variables and settings.</p>
+                                <div class="row-fluid">
+                                    <ul class="thumbnails">
+                                        <li class="span6"><a href="img/debug.jpg" class="thumbnail"><img src="img/debug_thumb.jpg" alt=""></a></li>
+                                        <li class="span6"><a href="img/debug2.jpg" class="thumbnail"><img src="img/debug2_thumb.jpg" alt=""></a></li>
+                                    </ul>
+                                </div>
+                            </section>
+
+                            <section id="debugvars">
+                                <h4>Output variables</h4>
+                                <p>Nphp disables all normal PHP output so only content that is returned from controller methods is sent as response body. Normal output counts everything that is output using <code>echo</code>, <code>print_r()</code>, <code>var_dump()</code> and similar functions and constructs. Instead of output everything is buffered and later either discarded if debug is set to FALSE or displayed in nphp debug toolbar if it's set to TRUE. Debug toolbar button is displayed at the right side of pages and can be pressed to show toolbar contents: PHP output and time it took to display the page. This toolbar can be disabled with setting application's <code>disableDebugToolbar()</code> to TRUE.</p>
+                                <p class="center"><img src="img/toolbar.jpg" alt="" class="img-polaroid"></p>
+                            </section>
+
+                            <br>
+
+                            <h3 id="applicationobject">Project skeleton</h3>
+
+                            <section id="skeletondl">
+                                <h4>Download</h4>
+                                <p>Coming soon.</p>
+                            </section>
+
+                            <br>
+
+                            <section id="skeletonstructure">
+                                <h4>Structure</h4>
+                                <p>Coming soon.</p>
+                            </section>
 
                             <!-- end content -->
                         </div>
