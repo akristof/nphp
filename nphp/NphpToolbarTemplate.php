@@ -14,13 +14,12 @@
     #nphp_debug_toolbar_button {
         position: absolute;
         top: 30px;
-        right: -20px;
+        right: -15px;
         _right: 0;
-        width: 68px;
-        height: 34px;
+        right: -0px\9;
+        width: 76px;
         background-color: #ccc;
         color: #000;
-        padding: 5px 8px;
         text-align: center;
         font-family: verdana, arial, sans-serif;
         font-weight: bold;
@@ -40,8 +39,6 @@
         background-color: #000;
         color: #fff;
         cursor: pointer;
-        height: 37px;
-        right: -18px;
     }
 
     #nphp_debug_toolbar {
