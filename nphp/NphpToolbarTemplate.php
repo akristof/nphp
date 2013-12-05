@@ -28,6 +28,7 @@
     	-o-transform: rotate(-90deg);
     	font-size: 18px;
     	border: 0;
+        z-index: 100000000;
     }
 
     #nphp_debug_toolbar_button span {
